@@ -46,14 +46,14 @@ We can use 'ddply' package once more to make a tabel which contains the average 
 
 ```r
 ave.steps.per.interval = ddply(activity,.(interval),summarize,average = mean(steps))
-max.steps = max(ave.steps.per.interval)
-max.steps.formatted = format(as.POSIXct('2014-10-03 06:00:00') + max.steps*5*60, "%I:%M:%S %p")
+max.steps = ave.steps.per.interval$interval[ave.steps.per.interval$average==max(ave.steps.per.interval$average)]
+max.steps.formatted = format(as.POSIXct('2014-10-03 12:00:00') + max.steps*5*60, "%I:%M:%S %p")
 plot(ave.steps.per.interval$interval,ave.steps.per.interval$average,type='l',xlab = '5-minutes Interval',ylab='Average Steps',main='Average Number of Steps per each 5-minutes Interval')
 ```
 
 ![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
 
-On average across all the days in the dataset, the interval 2355 contains the maximum number of steps. Assuming the first measurments is started at 6:00 AM, the 2355 interval has started at 10:15:00 AM.
+On average across all the days in the dataset, the interval 835 contains the maximum number of steps. Assuming the first measurments is started at 12:00 PM, the 835th interval has started at 09:35:00 AM.
 
 ## Imputing missing values
 
@@ -105,7 +105,7 @@ hist(sum.steps.per.day$sum,xlab='Steps per Day',main='Total Number of Steps Take
 
 ![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8.png) 
 
-For imputed missing value dataset, the mean of total number of steps taken per day is 1.072 &times; 10<sup>4</sup> while the median is 10600. Note that the median is lower when after imputing the missing values. This can be explained by the fact that we imputed the missing values based on random replacement of existing values. A quick look at the 'steps' shows that the frequency of smaller than the previousely measured median 'steps' is higher than more than median ones.
+For imputed missing value dataset, the mean of total number of steps taken per day is 1.089 &times; 10<sup>4</sup> while the median is 10855. Note that the median is lower when after imputing the missing values. This can be explained by the fact that we imputed the missing values based on random replacement of existing values. A quick look at the 'steps' shows that the frequency of smaller than the previousely measured median 'steps' is higher than more than median ones.
 
 On the other hand, if one decides to impute the missing values by mean or median of steps per day, we can expect less difference between the two analysis. 
 

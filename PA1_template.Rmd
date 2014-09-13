@@ -40,12 +40,12 @@ We can use 'ddply' package once more to make a tabel which contains the average 
 
 ```{r}
 ave.steps.per.interval = ddply(activity,.(interval),summarize,average = mean(steps))
-max.steps = max(ave.steps.per.interval)
-max.steps.formatted = format(as.POSIXct('2014-10-03 06:00:00') + max.steps*5*60, "%I:%M:%S %p")
+max.steps = ave.steps.per.interval$interval[ave.steps.per.interval$average==max(ave.steps.per.interval$average)]
+max.steps.formatted = format(as.POSIXct('2014-10-03 12:00:00') + max.steps*5*60, "%I:%M:%S %p")
 plot(ave.steps.per.interval$interval,ave.steps.per.interval$average,type='l',xlab = '5-minutes Interval',ylab='Average Steps',main='Average Number of Steps per each 5-minutes Interval')
 ```
 
-On average across all the days in the dataset, the interval `r max.steps` contains the maximum number of steps. Assuming the first measurments is started at 6:00 AM, the `r max.steps` interval has started at `r max.steps.formatted`.
+On average across all the days in the dataset, the interval `r max.steps` contains the maximum number of steps. Assuming the first measurments is started at 12:00 PM, the `r max.steps`th interval has started at `r max.steps.formatted`.
 
 ## Imputing missing values
 
