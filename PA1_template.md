@@ -1,4 +1,9 @@
-# Reproducible Research: Peer Assessment 1
+---
+title: "Reproducible Research: Peer Assessment 1"
+output: 
+  html_document:
+    keep_md: true
+---
 
 ## Loading and preprocessing the data
 
@@ -30,7 +35,7 @@ median.steps = median(sum.steps.per.day$sum)
 hist(sum.steps.per.day$sum,xlab='Steps per Day',main='Total Number of Steps Taken each Day')
 ```
 
-![plot of chunk unnamed-chunk-3](./PA1_template_files/figure-html/unnamed-chunk-3.png) 
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
 
 The mean of total number of steps taken per day is 1.0766 &times; 10<sup>4</sup> while the median is 10765.
 
@@ -46,7 +51,7 @@ max.steps.formatted = format(as.POSIXct('2014-10-03 06:00:00') + max.steps*5*60,
 plot(ave.steps.per.interval$interval,ave.steps.per.interval$average,type='l',xlab = '5-minutes Interval',ylab='Average Steps',main='Average Number of Steps per each 5-minutes Interval')
 ```
 
-![plot of chunk unnamed-chunk-4](./PA1_template_files/figure-html/unnamed-chunk-4.png) 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
 
 On average across all the days in the dataset, the interval 2355 contains the maximum number of steps. Assuming the first measurments is started at 6:00 AM, the 2355 interval has started at 10:15:00 AM.
 
@@ -98,9 +103,9 @@ median.steps = median(sum.steps.per.day$sum)
 hist(sum.steps.per.day$sum,xlab='Steps per Day',main='Total Number of Steps Taken each Day (Imputed the Missing Values)')
 ```
 
-![plot of chunk unnamed-chunk-8](./PA1_template_files/figure-html/unnamed-chunk-8.png) 
+![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8.png) 
 
-For imputed missing value dataset, the mean of total number of steps taken per day is 1.0827 &times; 10<sup>4</sup> while the median is 10765. Note that the median is lower when after imputing the missing values. This can be explained by the fact that we imputed the missing values based on random replacement of existing values. A quick look at the 'steps' shows that the frequency of smaller than the previousely measured median 'steps' is higher than more than median ones.
+For imputed missing value dataset, the mean of total number of steps taken per day is 1.072 &times; 10<sup>4</sup> while the median is 10600. Note that the median is lower when after imputing the missing values. This can be explained by the fact that we imputed the missing values based on random replacement of existing values. A quick look at the 'steps' shows that the frequency of smaller than the previousely measured median 'steps' is higher than more than median ones.
 
 On the other hand, if one decides to impute the missing values by mean or median of steps per day, we can expect less difference between the two analysis. 
 
@@ -125,6 +130,6 @@ ave.steps.per.interval = ddply(activity.imputed,.(interval,week),summarize,avera
 ggplot(ave.steps.per.interval,aes(interval,average)) + facet_grid(.~ week) + geom_line()
 ```
 
-![plot of chunk unnamed-chunk-10](./PA1_template_files/figure-html/unnamed-chunk-10.png) 
+![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10.png) 
 
 It can be seen clearly that during the week most of the activities are done earlier in the day (assuming that lower interval refers to earlier times). 
