@@ -1,15 +1,11 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 ## Loading and preprocessing the data
 
 First, we read the data.
 
-```{r}
+
+```r
 activity.with.na <- read.csv('activity.csv',stringsAsFactors=FALSE)
 ```
 
@@ -18,13 +14,15 @@ activity.with.na <- read.csv('activity.csv',stringsAsFactors=FALSE)
 
 In order to be able to do statistics on our data set, first we remove the observations that having missing values of 'steps.' 
 
-```{r}
+
+```r
 activity <- na.omit(activity.with.na)
 ```
 
 Using ddply, we create a table then has the sum of the steps for each day. Note that the dates are measurements interval in one day therefore we can simply we can subset the data based on the 'date' column.
 
-```{r}
+
+```r
 library(plyr)
 sum.steps.per.day = ddply(activity,.(date),summarize,sum = sum(steps))
 mean.steps   = mean(sum.steps.per.day$sum)
@@ -32,20 +30,25 @@ median.steps = median(sum.steps.per.day$sum)
 hist(sum.steps.per.day$sum,xlab='Steps per Day',main='Total Number of Steps Taken each Day')
 ```
 
-The mean of total number of steps taken per day is `r mean.steps` while the median is `r median.steps`.
+![plot of chunk unnamed-chunk-3](./PA1_template_files/figure-html/unnamed-chunk-3.png) 
+
+The mean of total number of steps taken per day is 1.0766 &times; 10<sup>4</sup> while the median is 10765.
 
 ## What is the average daily activity pattern?
 
 We can use 'ddply' package once more to make a tabel which contains the average number of steps per each 5-minutes interval. 
 
-```{r}
+
+```r
 ave.steps.per.interval = ddply(activity,.(interval),summarize,average = mean(steps))
 max.steps = max(ave.steps.per.interval)
 max.steps.formatted = format(as.POSIXct('2014-10-03 06:00:00') + max.steps*5*60, "%I:%M:%S %p")
 plot(ave.steps.per.interval$interval,ave.steps.per.interval$average,type='l',xlab = '5-minutes Interval',ylab='Average Steps',main='Average Number of Steps per each 5-minutes Interval')
 ```
 
-On average across all the days in the dataset, the interval `r max.steps` contains the maximum number of steps. Assuming the first measurments is started at 6:00 AM, the `r max.steps` interval has started at `r max.steps.formatted`.
+![plot of chunk unnamed-chunk-4](./PA1_template_files/figure-html/unnamed-chunk-4.png) 
+
+On average across all the days in the dataset, the interval 2355 contains the maximum number of steps. Assuming the first measurments is started at 6:00 AM, the 2355 interval has started at 10:15:00 AM.
 
 ## Imputing missing values
 
@@ -53,16 +56,18 @@ Note that there are a number of days/intervals where there are missing values (c
 
 Below, I show how one can calculated the total number of missing values.
 
-```{r}
+
+```r
 missing.steps <- is.na(activity.with.na$steps)
 number.of.missing.steps <- sum(missing.steps)
 ```
 
-We find that the total number of missing values is equal to `r number.of.missing.steps` This is about `r round(number.of.missing.steps*100/length(activity.with.na$steps),1)`% of the total number of observations.
+We find that the total number of missing values is equal to 2304 This is about 13.1% of the total number of observations.
 
 In order to study the impact of imputing missing data on the estimates of the total daily,  number of steps, I devise a strategy for filling in all of the missing values in the dataset. The strategy is influence by "Data Analysis Using Regression and Multilevel/Hierarchical Models" by Andrew Gelman and Jennifer Hill.
 
-```{r}
+
+```r
 random.imp <- function (df,col){
 missing <- is.na(df[col])
 n.missing <- sum(missing)
@@ -76,7 +81,8 @@ return (imputed)
 
 Therefore, I can imput the missing values for steps as follow:
 
-```{r}
+
+```r
 activity.imputed <- random.imp(activity.with.na,'steps')
 ```
 
@@ -84,14 +90,17 @@ activity.imputed <- random.imp(activity.with.na,'steps')
 Now, we make a histogram of the total number of steps taken each day and Calculate and compare it with previous analysis.
 
 
-```{r}
+
+```r
 sum.steps.per.day = ddply(activity.imputed,.(date),summarize,sum = sum(steps))
 mean.steps   = mean(sum.steps.per.day$sum)
 median.steps = median(sum.steps.per.day$sum)
 hist(sum.steps.per.day$sum,xlab='Steps per Day',main='Total Number of Steps Taken each Day (Imputed the Missing Values)')
 ```
 
-For imputed missing value dataset, the mean of total number of steps taken per day is `r mean.steps` while the median is `r median.steps`. Note that the median is lower when after imputing the missing values. This can be explained by the fact that we imputed the missing values based on random replacement of existing values. A quick look at the 'steps' shows that the frequency of smaller than the previousely measured median 'steps' is higher than more than median ones.
+![plot of chunk unnamed-chunk-8](./PA1_template_files/figure-html/unnamed-chunk-8.png) 
+
+For imputed missing value dataset, the mean of total number of steps taken per day is 1.0827 &times; 10<sup>4</sup> while the median is 10765. Note that the median is lower when after imputing the missing values. This can be explained by the fact that we imputed the missing values based on random replacement of existing values. A quick look at the 'steps' shows that the frequency of smaller than the previousely measured median 'steps' is higher than more than median ones.
 
 On the other hand, if one decides to impute the missing values by mean or median of steps per day, we can expect less difference between the two analysis. 
 
@@ -99,7 +108,8 @@ On the other hand, if one decides to impute the missing values by mean or median
 
 To answer this question, I create a new factor variable called 'week' in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
 
-```{r}
+
+```r
 activity.imputed$date <- as.Date(activity.imputed[['date']])
 activity.imputed$week <- weekdays(activity.imputed$date)
 activity.imputed$week[(activity.imputed$week == 'Sunday' | activity.imputed$week == 'Saturday')] <- 'weekend'
@@ -108,10 +118,13 @@ activity.imputed$week[!activity.imputed$week == 'weekend'] <- 'weekday'
 
 I createa a panel plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days using ggplot package.
 
-```{r}
+
+```r
 library(ggplot2)
 ave.steps.per.interval = ddply(activity.imputed,.(interval,week),summarize,average = mean(steps))
 ggplot(ave.steps.per.interval,aes(interval,average)) + facet_grid(.~ week) + geom_line()
 ```
+
+![plot of chunk unnamed-chunk-10](./PA1_template_files/figure-html/unnamed-chunk-10.png) 
 
 It can be seen clearly that during the week most of the activities are done earlier in the day (assuming that lower interval refers to earlier times). 
