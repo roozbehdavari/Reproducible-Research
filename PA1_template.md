@@ -107,7 +107,7 @@ hist(sum.steps.per.day$sum,xlab='Steps per Day',main='Total Number of Steps Take
 
 ![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8.png) 
 
-For imputed missing value dataset, the mean of total number of steps taken per day is 1.0705 &times; 10<sup>4</sup> while the median is 10600. Note that both mean has changed for only few percents. This was expected as we imputed the missing values based on random replacement of existing values. 
+For imputed missing value dataset, the mean of total number of steps taken per day is 1.0705 &times; 10<sup>4</sup> while the median is 10600. Note that both mean and median have changed for only few percents. This was expected as we imputed the missing values based on random replacement of existing values. 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
