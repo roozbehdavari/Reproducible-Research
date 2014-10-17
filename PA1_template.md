@@ -1,8 +1,8 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
+author: "Roozbeh Davari"
+output: html_document
+keep_md: true
 ---
 
 ## Loading and preprocessing the data
@@ -48,7 +48,9 @@ We can use 'ddply' package once more to make a tabel which contains the average 
 ave.steps.per.interval = ddply(activity,.(interval),summarize,average = mean(steps))
 max.steps = ave.steps.per.interval$interval[ave.steps.per.interval$average==max(ave.steps.per.interval$average)]
 max.steps.formatted = format(as.POSIXct('2014-10-03 12:00:00') + max.steps*5*60, "%I:%M:%S %p")
-plot(ave.steps.per.interval$interval,ave.steps.per.interval$average,type='l',xlab = '5-minutes Interval',ylab='Average Steps',main='Average Number of Steps per each 5-minutes Interval')
+plot(ave.steps.per.interval$interval,ave.steps.per.interval$average,type='l',
+     xlab = '5-minutes Interval',ylab='Average Steps',
+     main='Average Number of Steps per each 5-minutes Interval')
 ```
 
 ![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
@@ -57,7 +59,7 @@ On average across all the days in the dataset, the interval 835 contains the max
 
 ## Imputing missing values
 
-Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
+Note that there are a number of days/intervals when there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
 
 Below, I show how one can calculated the total number of missing values.
 
@@ -69,7 +71,7 @@ number.of.missing.steps <- sum(missing.steps)
 
 We find that the total number of missing values is equal to 2304 This is about 13.1% of the total number of observations.
 
-In order to study the impact of imputing missing data on the estimates of the total daily,  number of steps, I devise a strategy for filling in all of the missing values in the dataset. The strategy is influence by "Data Analysis Using Regression and Multilevel/Hierarchical Models" by Andrew Gelman and Jennifer Hill.
+In order to study the impact of imputing missing data on the estimates of the total daily number of steps, I use a strategy for filling in all of the missing values in the dataset. This strategy is adapted from "Data Analysis Using Regression and Multilevel/Hierarchical Models" by Andrew Gelman and Jennifer Hill.
 
 
 ```r
@@ -105,9 +107,7 @@ hist(sum.steps.per.day$sum,xlab='Steps per Day',main='Total Number of Steps Take
 
 ![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8.png) 
 
-For imputed missing value dataset, the mean of total number of steps taken per day is 1.089 &times; 10<sup>4</sup> while the median is 10855. Note that the median is lower when after imputing the missing values. This can be explained by the fact that we imputed the missing values based on random replacement of existing values. A quick look at the 'steps' shows that the frequency of smaller than the previousely measured median 'steps' is higher than more than median ones.
-
-On the other hand, if one decides to impute the missing values by mean or median of steps per day, we can expect less difference between the two analysis. 
+For imputed missing value dataset, the mean of total number of steps taken per day is 1.0705 &times; 10<sup>4</sup> while the median is 10600. Note that both mean has changed for only few percents. This was expected as we imputed the missing values based on random replacement of existing values. 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
